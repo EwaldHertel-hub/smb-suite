@@ -26,12 +26,14 @@
     "seed": "pnpm --filter api seed"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1",
-    "dotenv": "^16.6.1",
-    "eslint": "^9.39.1",
-    "prettier": "^3.6.2",
+    "@prisma/engines": "^5.22.0",
+    "concurrently": "catalog:",
+    "dotenv": "catalog:",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "prisma": "catalog:",
     "rimraf": "^5.0.10",
-    "typescript": "^5.9.3"
+    "typescript": "catalog:"
   },
   "engines": {
     "node": ">=20.0.0",
@@ -51,5 +53,12 @@
     "React",
     "TypeScript",
     "Small Business"
-  ]
+  ],
+  "dependencies": {
+    "@prisma/client": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "sass": "catalog:"
+  }
 }
