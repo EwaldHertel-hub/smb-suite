@@ -61,10 +61,42 @@ model Client {
   name           String
   email          String?
   phone          String?
-  billingAddr    String?
+  street         String
+  zipCode        String
+  city           String
+  country        String
+  website        String?      @db.VarChar(255)
   quotes         Quote[]
   invoices       Invoice[]
   createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  employees      Employee[]
+}
+
+model Department {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  employees Employee[]
+}
+
+model Employee {
+  id           String  @id @default(cuid())
+  clientId     String
+  departmentId String?
+  firstName    String
+  lastName     String
+  email        String? @unique
+  phone        String?
+
+  client     Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  department Department? @relation(fields: [departmentId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+  @@index([departmentId])
+  @@map("employees") // falls du schon "employees" nutzt, so belassen
 }
 
 model Quote {
