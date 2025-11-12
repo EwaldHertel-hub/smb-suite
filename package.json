@@ -29,11 +29,12 @@
     "@prisma/engines": "^5.22.0",
     "concurrently": "catalog:",
     "dotenv": "catalog:",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
-    "prisma": "catalog:",
+    "eslint": "^9.39.1",
+    "js-yaml": "^4.1.1",
+    "prettier": "^3.6.2",
+    "prisma": "^5.22.0",
     "rimraf": "^5.0.10",
-    "typescript": "catalog:"
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=20.0.0",
@@ -55,10 +56,12 @@
     "Small Business"
   ],
   "dependencies": {
-    "@prisma/client": "catalog:",
-    "next": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "sass": "catalog:"
+    "@prisma/client": "^5.22.0",
+    "next": "^14.2.33",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sass": "^1.94.0",
+    "concurrently": "^9.2.1",
+    "dotenv": "^16.6.1"
   }
 }
