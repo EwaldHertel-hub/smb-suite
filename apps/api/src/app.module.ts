@@ -7,6 +7,11 @@ import { ClientsModule } from "./modules/clients/clients.module";
 import { QuotesModule } from "./modules/quotes/quotes.module";
 import { InvoicesModule } from "./modules/invoices/invoices.module";
 import { PaymentsModule } from "./modules/payments/payments.module";
+import { PdfModule } from "./pdf/pdf.module";
+import { MailerModule } from "./mailer/mailer.module";
+import { QueueModule } from "./queue/queue.module";
+import { QuotesSendModule } from "./modules/quotes/quotes.module.extend";
+import { InvoicesSendModule } from "./modules/invoices/invoices.module.extend";
 
 @Module({
   imports: [
@@ -18,6 +23,11 @@ import { PaymentsModule } from "./modules/payments/payments.module";
     QuotesModule,
     InvoicesModule,
     PaymentsModule,
+    QueueModule,
+    MailerModule,
+    PdfModule,
+    QuotesSendModule,
+    InvoicesSendModule,
   ],
 })
 export class AppModule {}
