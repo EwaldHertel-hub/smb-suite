@@ -6,12 +6,15 @@
     "start": "next start -p 3000"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8",
+    "axios": "^1.7",
     "next": "^14",
     "react": "^18",
     "react-dom": "^18",
     "sass": "^1.77",
-    "axios": "^1.7",
-    "zod": "^3",
-    "@tanstack/react-table": "^8"
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.3"
   }
 }
