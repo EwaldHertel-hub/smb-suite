@@ -17,6 +17,7 @@
     "@nestjs/platform-express": "^10",
     "@prisma/client": "^5",
     "@types/bcrypt": "^6.0.0",
+    "@types/nodemailer": "^7.0.3",
     "@types/passport-jwt": "^4.0.1",
     "bcrypt": "^5.1.1",
     "bullmq": "^5",
@@ -30,7 +31,8 @@
     "passport-jwt": "^4",
     "pino": "^9",
     "pino-pretty": "^11",
-    "prisma": "^5"
+    "prisma": "^5",
+    "puppeteer": "^24.29.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10",
