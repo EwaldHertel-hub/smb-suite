@@ -66,4 +66,61 @@ export class AuthService {
     });
     return { accessToken, refreshToken, user: payload };
   }
+
+  /**
+   * Logout: optionally remove a single refresh token from storage.
+   * If you persist refresh tokens (e.g. a RefreshToken Prisma model), this
+   * will attempt to delete it. Otherwise it just returns success and the
+   * client should drop tokens locally.
+   */
+  async logout(refreshToken?: string) {
+    if (!refreshToken) return { success: true };
+
+    try {
+      // defensive: only attempt DB deletion if a refreshToken model exists
+      if ((this.prisma as any).refreshToken) {
+        await (this.prisma as any).refreshToken.deleteMany({
+          where: { token: refreshToken },
+        });
+      }
+    } catch (e) {
+      // ignore if model/field does not exist or deletion fails
+    }
+
+    return { success: true };
+  }
+
+  /**
+   * Logout all sessions for a user (server-side revoke).
+   * Requires a persisted refresh token model with a userId field to work.
+   * If you don't persist refresh tokens, call this when you want to force
+   * clients to drop tokens locally (still returns success).
+   */
+  async logoutAll(userId?: string, refreshToken?: string) {
+    // try to derive userId from refreshToken if not provided
+    if (!userId && refreshToken) {
+      try {
+        const decoded = await this.jwt.verifyAsync(refreshToken, {
+          secret: process.env.JWT_SECRET!,
+        });
+        userId = (decoded as any).sub;
+      } catch (e) {
+        // ignore decode errors
+      }
+    }
+
+    if (!userId) return { success: true };
+
+    try {
+      if ((this.prisma as any).refreshToken) {
+        await (this.prisma as any).refreshToken.deleteMany({
+          where: { userId },
+        });
+      }
+    } catch (e) {
+      // ignore if model/field does not exist or deletion fails
+    }
+
+    return { success: true };
+  }
 }

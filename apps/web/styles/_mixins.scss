@@ -1,5 +1,22 @@
+@use "./_variables.scss" as *;
+
 @mixin card {
   background: $color-card;
   border-radius: $radius;
   padding: $gap;
+  border: 1px solid $border;
+}
+@mixin input {
+  background: #0f1320;
+  border: 1px solid $border;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 10px;
+  width: 100%;
+}
+@mixin label {
+  font-size: 12px;
+  color: $muted;
+  margin-bottom: 6px;
+  display: block;
 }
