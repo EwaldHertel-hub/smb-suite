@@ -1,116 +1,145 @@
-generator client { provider = "prisma-client-js" }
-datasource db { provider = "postgresql" url = env("DATABASE_URL") }
-
-
-enum UserRole { OWNER ADMIN MEMBER }
-enum QuoteStatus { DRAFT SENT ACCEPTED REJECTED EXPIRED }
-enum InvoiceStatus { DRAFT SENT PARTIALLY_PAID PAID OVERDUE CANCELED }
-
-
-authorization "org"() {
-query: organizationId == auth().organizationId
+generator client {
+  provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELED
+}
 
 model User {
-id String @id @default(cuid())
-email String @unique
-passwordHash String
-name String
-organizationId String?
-role UserRole @default(MEMBER)
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+  id             String        @id @default(cuid())
+  email          String        @unique
+  passwordHash   String
+  name           String
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  role           UserRole      @default(MEMBER)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
-
 
 model Organization {
-id String @id @default(cuid())
-name String
-address String?
-vatId String?
-users User[]
-clients Client[]
-createdAt DateTime @default(now())
+  id        String    @id @default(cuid())
+  name      String
+  address   String?
+  vatId     String?
+  users     User[]
+  clients   Client[]
+  quotes    Quote[]
+  invoices  Invoice[]
+  createdAt DateTime  @default(now())
 }
-
 
 model Client {
-id String @id @default(cuid())
-organizationId String
-name String
-email String?
-phone String?
-billingAddr String?
-createdAt DateTime @default(now())
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  name           String
+  email          String?
+  phone          String?
+  billingAddr    String?
+  quotes         Quote[]
+  invoices       Invoice[]
+  createdAt      DateTime     @default(now())
 }
-
 
 model Quote {
-id String @id @default(cuid())
-organizationId String
-clientId String
-number Int
-status QuoteStatus @default(DRAFT)
-currency String @default("EUR")
-validUntil DateTime?
-notes String?
-subtotal Decimal @db.Decimal(10,2)
-vatTotal Decimal @db.Decimal(10,2)
-total Decimal @db.Decimal(10,2)
-pdfUrl String?
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  clientId       String
+  client         Client       @relation(fields: [clientId], references: [id])
+  number         Int
+  status         QuoteStatus  @default(DRAFT)
+  currency       String       @default("EUR")
+  validUntil     DateTime?
+  notes          String?
+  subtotal       Decimal      @db.Decimal(10, 2)
+  vatTotal       Decimal      @db.Decimal(10, 2)
+  total          Decimal      @db.Decimal(10, 2)
+  pdfUrl         String?
+  items          QuoteItem[]
+  invoices       Invoice[] // back-reference if invoices are generated from quotes
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
-
 
 model QuoteItem {
-id String @id @default(cuid())
-quoteId String
-title String
-qty Decimal @db.Decimal(10,2)
-unit String
-unitPrice Decimal @db.Decimal(10,2)
-vatRate Decimal @db.Decimal(4,2)
+  id        String  @id @default(cuid())
+  quoteId   String
+  quote     Quote   @relation(fields: [quoteId], references: [id])
+  title     String
+  qty       Decimal @db.Decimal(10, 2)
+  unit      String
+  unitPrice Decimal @db.Decimal(10, 2)
+  vatRate   Decimal @db.Decimal(4, 2)
 }
-
 
 model Invoice {
-id String @id @default(cuid())
-organizationId String
-clientId String
-quoteId String?
-number Int
-status InvoiceStatus @default(DRAFT)
-issueDate DateTime
-dueDate DateTime
-currency String @default("EUR")
-subtotal Decimal @db.Decimal(10,2)
-vatTotal Decimal @db.Decimal(10,2)
-total Decimal @db.Decimal(10,2)
-paidAmount Decimal @db.Decimal(10,2) @default(0)
-pdfUrl String?
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+  id             String        @id @default(cuid())
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  clientId       String
+  client         Client        @relation(fields: [clientId], references: [id])
+  quoteId        String?
+  quote          Quote?        @relation(fields: [quoteId], references: [id])
+  number         Int
+  status         InvoiceStatus @default(DRAFT)
+  issueDate      DateTime
+  dueDate        DateTime
+  currency       String        @default("EUR")
+  subtotal       Decimal       @db.Decimal(10, 2)
+  vatTotal       Decimal       @db.Decimal(10, 2)
+  total          Decimal       @db.Decimal(10, 2)
+  paidAmount     Decimal       @default(0) @db.Decimal(10, 2)
+  pdfUrl         String?
+  items          InvoiceItem[]
+  payments       Payment[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
-
 
 model InvoiceItem {
-id String @id @default(cuid())
-invoiceId String
-title String
-qty Decimal @db.Decimal(10,2)
-unit String
-unitPrice Decimal @db.Decimal(10,2)
-vatRate Decimal @db.Decimal(4,2)
+  id        String  @id @default(cuid())
+  invoiceId String
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  title     String
+  qty       Decimal @db.Decimal(10, 2)
+  unit      String
+  unitPrice Decimal @db.Decimal(10, 2)
+  vatRate   Decimal @db.Decimal(4, 2)
 }
 
-
 model Payment {
-id String @id @default(cuid())
-invoiceId String
-amount Decimal @db.Decimal(10,2)
-date DateTime
-method String
-note String?
+  id        String   @id @default(cuid())
+  invoiceId String
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id])
+  amount    Decimal  @db.Decimal(10, 2)
+  date      DateTime
+  method    String
+  note      String?
 }
