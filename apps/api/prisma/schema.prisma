@@ -56,47 +56,46 @@ model Organization {
 
 model Client {
   id             String       @id @default(cuid())
-  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
-  name           String
-  email          String?
-  phone          String?
-  street         String
-  zipCode        String
-  city           String
-  country        String
-  website        String?      @db.VarChar(255)
-  quotes         Quote[]
-  invoices       Invoice[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  employees      Employee[]
-}
+  organizationId String
 
-model Department {
-  id        String     @id @default(cuid())
-  name      String     @unique
-  employees Employee[]
-}
+  name  String
+  email String?
+  phone String?
 
-model Employee {
-  id           String  @id @default(cuid())
-  clientId     String
-  departmentId String?
-  firstName    String
-  lastName     String
-  email        String? @unique
-  phone        String?
+  street     String?
+  postalCode String?
+  city       String?
+  country    String? @default("DE")
+  website    String?
 
-  client     Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  department Department? @relation(fields: [departmentId], references: [id])
+  billingAddr String? // kann später aus den Feldern generiert werden, wenn du willst
+
+  employees ClientEmployee[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([clientId])
-  @@index([departmentId])
-  @@map("employees") // falls du schon "employees" nutzt, so belassen
+  quotes   Quote[]
+  invoices Invoice[]
+}
+
+model ClientEmployee {
+  id           String  @id @default(cuid())
+  client       Client  @relation(fields: [clientId], references: [id])
+  clientId     String
+  firstName    String
+  lastName     String
+  email        String?
+  phone        String?
+
+  department String?
+  position   String? // z. B. „Sachbearbeiter“
+
+  isPrimary Boolean @default(false) // Hauptansprechpartner?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Quote {

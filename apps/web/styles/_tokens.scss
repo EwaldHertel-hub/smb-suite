@@ -1,0 +1,33 @@
+// Default (light)
+:root {
+  --color-bg: #f0f2f5;
+  --color-bg-elevated: #ffffff;
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-primary: #3b82f6;
+  --color-primary-soft: #dbeafe;
+  --color-border: #e5e7eb;
+  --color-sidebar-bg: #111827;
+  --color-sidebar-text: #e5e7eb;
+  --color-sidebar-active: #1f2937;
+
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
+
+  --transition-fast: 150ms ease-out;
+}
+
+// Dark theme
+html[data-theme="dark"] {
+  --color-bg: #020617;
+  --color-bg-elevated: #020617;
+  --color-text: #e5e7eb;
+  --color-text-muted: #9ca3af;
+  --color-primary: #60a5fa;
+  --color-primary-soft: rgba(37, 99, 235, 0.25);
+  --color-border: rgba(148, 163, 184, 0.3);
+  --color-sidebar-bg: #020617;
+  --color-sidebar-text: #e5e7eb;
+  --color-sidebar-active: #111827;
+}

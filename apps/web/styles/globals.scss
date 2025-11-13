@@ -1,97 +1,22 @@
-@use "./_variables.scss" as *;
-@use "./_mixins.scss" as *;
+@import "./layout";
+@import "./tokens"; // Farben, Spacing, etc.
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
+
 html,
 body {
+  padding: 0;
   margin: 0;
-  background: $color-bg;
-  color: $color-text;
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    Arial,
+  height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
 }
-a {
-  color: $color-text;
-  text-decoration: none;
-}
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: $gap;
-}
-.card {
-  @include card;
-}
-.btn {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid $border;
-  background: #1a1f2b;
-  color: $color-text;
-  cursor: pointer;
-}
-.btn.primary {
-  background: $color-accent;
-  color: #0b0d12;
-  border-color: transparent;
-}
-.input {
-  @include input;
-}
-.label {
-  @include label;
-}
-.row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.grid {
-  display: grid;
-  gap: 16px;
-}
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.table th,
-.table td {
-  padding: 10px;
-  border-bottom: 1px solid $border;
-  text-align: left;
-}
-.nav {
-  display: flex;
-  gap: 10px;
-  padding: 8px;
-  border-bottom: 1px solid $border;
-  margin-bottom: 16px;
-}
-.nav a {
-  padding: 8px 10px;
-  border-radius: 10px;
-}
-.nav a.active,
-.nav a:hover {
-  background: #1a1f2b;
-}
-.kpi {
-  @include card;
-  display: grid;
-  gap: 4px;
-}
-.kpi .value {
-  font-size: 28px;
-  font-weight: 700;
-}
-.kpi .label {
-  color: $muted;
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
 }

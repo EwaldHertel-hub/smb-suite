@@ -2,33 +2,110 @@ import {
   IsEmail,
   IsOptional,
   IsString,
-  IsNotEmpty,
-  IsUrl,
   IsArray,
   ValidateNested,
+  ArrayMinSize,
 } from "class-validator";
 import { Type } from "class-transformer";
 
-class CreateEmployeeInput {
-  @IsString() @IsNotEmpty() firstName!: string;
-  @IsString() @IsNotEmpty() lastName!: string;
-  @IsOptional() @IsString() email?: string;
-  @IsOptional() @IsString() phone?: string;
-  @IsOptional() @IsString() departmentId?: string;
+export class ClientEmployeeDto {
+  @IsString()
+  firstName!: string;
+
+  @IsString()
+  lastName!: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  department?: string;
+
+  @IsOptional()
+  @IsString()
+  position?: string;
+
+  @IsOptional()
+  isPrimary?: boolean;
 }
 
 export class CreateClientDto {
-  @IsString() name!: string;
-  @IsOptional() @IsEmail() email?: string;
-  @IsOptional() @IsString() phone?: string;
-  @IsString() @IsNotEmpty() street!: string;
-  @IsString() @IsNotEmpty() zipCode!: string;
-  @IsString() @IsNotEmpty() city!: string;
-  @IsString() @IsNotEmpty() country!: string;
-  @IsOptional() @IsUrl({ require_tld: false }) website?: string;
+  @IsString()
+  name!: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  // Anschrift
+  @IsOptional()
+  @IsString()
+  street?: string;
+
+  @IsOptional()
+  @IsString()
+  postalCode?: string;
+
+  @IsOptional()
+  @IsString()
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+
+  @IsOptional()
+  @IsString()
+  website?: string;
+
+  // mindestens ein Mitarbeiter
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => CreateEmployeeInput)
-  employees!: CreateEmployeeInput[];
+  @Type(() => ClientEmployeeDto)
+  @ArrayMinSize(1)
+  employees!: ClientEmployeeDto[];
 }
-export class UpdateClientDto extends CreateClientDto {}
+
+export class UpdateClientDto {
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  street?: string;
+
+  @IsOptional()
+  @IsString()
+  postalCode?: string;
+
+  @IsOptional()
+  @IsString()
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+
+  @IsOptional()
+  @IsString()
+  website?: string;
+}

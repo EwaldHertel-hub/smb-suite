@@ -1,6 +1,13 @@
-import "../styles/globals.scss";
-import { Providers } from "@/store/provider";
-import Link from "next/link";
+import type { Metadata } from "next";
+import React from "react";
+import "../styles/globals.scss"; // dein globales Sass
+import { Providers } from "@/store/Providers";
+import Layout from "@/components/layout";
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard",
+  description: "Next.js + TS + Redux + Sass Dashboard",
+};
 
 export default function RootLayout({
   children,
@@ -11,19 +18,7 @@ export default function RootLayout({
     <html lang="de">
       <body>
         <Providers>
-          <div className="container">
-            <nav className="nav">
-              <Link href="/">Home</Link>
-              <Link href="/dashboard">Dashboard</Link>
-              <Link href="/clients">Kunden</Link>
-              <Link href="/quotes">Angebote</Link>
-              <Link href="/invoices">Rechnungen</Link>
-              <Link href="/login" style={{ marginLeft: "auto" }}>
-                Login
-              </Link>
-            </nav>
-            {children}
-          </div>
+          <Layout>{children}</Layout>
         </Providers>
       </body>
     </html>

@@ -1,0 +1,55 @@
+@use "../_mixins" as mixins;
+
+.stat-box {
+  @include mixins.card;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+
+  &__value {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  &__progress {
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.25);
+    overflow: hidden;
+    margin-top: 0.4rem;
+  }
+
+  &__progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--color-primary), #22c55e);
+    border-radius: 999px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 0.3rem;
+  }
+
+  &__change {
+    font-weight: 600;
+  }
+}
