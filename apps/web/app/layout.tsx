@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import React from "react";
-import "../styles/globals.scss"; // dein globales Sass
+import "../styles/globals.scss";
 import { Providers } from "@/store/Providers";
-import Layout from "@/components/layout";
+import AppShell from "@/components/layout/AppShell";
+import { AuthInit } from "@/components/AuthInit";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -18,7 +19,7 @@ export default function RootLayout({
     <html lang="de">
       <body>
         <Providers>
-          <Layout>{children}</Layout>
+          <AppShell>{children}</AppShell>
         </Providers>
       </body>
     </html>

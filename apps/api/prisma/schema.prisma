@@ -81,13 +81,13 @@ model Client {
 }
 
 model ClientEmployee {
-  id           String  @id @default(cuid())
-  client       Client  @relation(fields: [clientId], references: [id])
-  clientId     String
-  firstName    String
-  lastName     String
-  email        String?
-  phone        String?
+  id        String  @id @default(cuid())
+  client    Client  @relation(fields: [clientId], references: [id])
+  clientId  String
+  firstName String
+  lastName  String
+  email     String?
+  phone     String?
 
   department String?
   position   String? // z. B. „Sachbearbeiter“

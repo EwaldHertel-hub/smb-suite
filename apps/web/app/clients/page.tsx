@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   useGetClientsQuery,
   useCreateClientMutation,
-} from '@/store/api/apiSlice';
+} from '@/store/slices/clientsApi';
 import Modal from '@/components/ui/Modal';
 
 type Client = {

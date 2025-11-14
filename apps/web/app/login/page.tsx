@@ -1,11 +1,12 @@
 "use client";
+
 import { useState } from "react";
 import { useLoginMutation } from "@/store/api/apiSlice";
 import { useDispatch } from "react-redux";
 import { setTokens } from "@/store/slices/authSlice";
 import { useRouter } from "next/navigation";
 
-export default function LoginReduxPage() {
+export default function LoginPage() {
   const [email, setEmail] = useState("demo@example.com");
   const [password, setPassword] = useState("");
   const [login, { isLoading, error }] = useLoginMutation();
@@ -22,7 +23,7 @@ export default function LoginReduxPage() {
         user: data.user,
       })
     );
-    router.push("/dashboard");
+    router.push("/");
   };
 
   return (

@@ -1,20 +1,22 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { RootState } from "../index";
+import { RootState } from "@/store";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
-export const baseApi = createApi({
+const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl,
+    baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth?.accessToken;
-      if (token) headers.set("Authorization", `Bearer ${token}`);
+      const token = (getState() as RootState).auth.accessToken;
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
       return headers;
     },
   }),
-  tagTypes: ["Client", "ClientEmployee", "Quote", "Invoice"],
+  tagTypes: ["Auth", "Users", "Client", "ClientEmployee", "Quote", "Invoice"],
   endpoints: () => ({}),
 });
 
-export default baseApi;
+export default api;

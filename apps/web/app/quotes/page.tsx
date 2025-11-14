@@ -1,10 +1,11 @@
 "use client";
+
 import Protected from "@/components/Protected";
 import {
   useGetQuotesQuery,
   useSendQuoteMutation,
-  useCreateInvoiceFromQuoteMutation,
-} from "@/store/api/apiSlice";
+} from "@/store/slices/quotesApi";
+import { useCreateInvoiceFromQuoteMutation } from "@/store/slices/invoicesApi";
 
 export default function QuotesPageRedux() {
   const { data = [], isLoading } = useGetQuotesQuery();
