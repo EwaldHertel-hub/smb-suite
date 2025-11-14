@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { Provider } from "react-redux";
-import { store } from "./index";
+import { store } from "./store";
 import { useAppSelector } from "./hooks";
 
 function ThemeApplier({ children }: { children: React.ReactNode }) {

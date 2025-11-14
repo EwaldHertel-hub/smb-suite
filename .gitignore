@@ -3,4 +3,4 @@ apps/api/.env
 apps/web/.env
 /apps/api/dist
 /apps/web/.next
-/apps/web/.next
+/apps/web/.next/*

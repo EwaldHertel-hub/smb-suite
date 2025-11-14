@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useLoginMutation } from "@/store/api/apiSlice";
+import { useLoginMutation } from "@/store/slices/authApi";
 import { useDispatch } from "react-redux";
 import { setTokens } from "@/store/slices/authSlice";
 import { useRouter } from "next/navigation";

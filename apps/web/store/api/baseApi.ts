@@ -15,7 +15,7 @@ const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Auth", "Users", "Client", "ClientEmployee", "Quote", "Invoice"],
+  tagTypes: ["Auth", "User", "Client", "ClientEmployee", "Quote", "Invoice"],
   endpoints: () => ({}),
 });
 
