@@ -1,12 +1,14 @@
 "use client";
 
+import Protected from "@/components/Protected";
 import StatBox from "@/components/ui/StatBox";
 
 export default function Home() {
   return (
-    <main className="grid">
-      <h1>Business Cockpit</h1>
-      <div className="stat-grid">
+    <Protected>
+      <main className="grid">
+        <h1>Business Cockpit</h1>
+        <div className="stat-grid">
           <StatBox
             title="Einnahmen"
             value="€ 12.430"
@@ -29,6 +31,7 @@ export default function Home() {
             description="diese Woche"
           />
         </div>
-    </main>
+      </main>
+    </Protected>
   );
 }
