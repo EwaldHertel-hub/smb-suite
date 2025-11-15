@@ -13,6 +13,8 @@ import { QueueModule } from "./queue/queue.module";
 import { QuotesSendModule } from "./modules/quotes/quotes.module.extend";
 import { InvoicesSendModule } from "./modules/invoices/invoices.module.extend";
 import { UsersModule } from './modules/users/users.module';
+import { ProjectsModule } from "./modules/projects/projects.module";
+import { TasksModule } from "./modules/tasks/tasks.module";
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { UsersModule } from './modules/users/users.module';
     QuotesSendModule,
     InvoicesSendModule,
     UsersModule,
+    ProjectsModule,
+    TasksModule,
   ],
 })
 export class AppModule {}

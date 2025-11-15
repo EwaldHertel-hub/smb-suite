@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Protected from '@/components/Protected';
+import { useState } from "react";
+import Protected from "@/components/Protected";
 import {
   useGetUsersQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
-} from '@/store/slices/usersApi';
+} from "@/store/slices/usersApi";
 
 type UserRow = {
   id: string;
   email: string;
   name: string;
-  role: 'OWNER' | 'ADMIN' | 'MEMBER';
+  role: "OWNER" | "ADMIN" | "MEMBER";
   department?: string;
   position?: string;
   isActive: boolean;
@@ -28,12 +28,12 @@ export default function TeamPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'MEMBER' as 'OWNER' | 'ADMIN' | 'MEMBER',
-    department: '',
-    position: '',
+    name: "",
+    email: "",
+    password: "",
+    role: "MEMBER" as "OWNER" | "ADMIN" | "MEMBER",
+    department: "",
+    position: "",
   });
 
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -46,7 +46,7 @@ export default function TeamPage() {
     setErrorMsg(null);
 
     if (!form.name || !form.email || !form.password) {
-      setErrorMsg('Name, E-Mail und Passwort sind erforderlich.');
+      setErrorMsg("Name, E-Mail und Passwort sind erforderlich.");
       return;
     }
 
@@ -61,16 +61,18 @@ export default function TeamPage() {
       }).unwrap();
 
       setForm({
-        name: '',
-        email: '',
-        password: '',
-        role: 'MEMBER',
-        department: '',
-        position: '',
+        name: "",
+        email: "",
+        password: "",
+        role: "MEMBER",
+        department: "",
+        position: "",
       });
     } catch (err: any) {
       console.error(err);
-      setErrorMsg(err?.data?.message ?? 'Mitarbeiter konnte nicht angelegt werden.');
+      setErrorMsg(
+        err?.data?.message ?? "Mitarbeiter konnte nicht angelegt werden."
+      );
     }
   };
 
@@ -101,18 +103,18 @@ export default function TeamPage() {
       setEditRow({});
     } catch (err: any) {
       console.error(err);
-      setErrorMsg('Mitarbeiter konnte nicht aktualisiert werden.');
+      setErrorMsg("Mitarbeiter konnte nicht aktualisiert werden.");
     }
   };
 
   const removeUser = async (id: string) => {
-    if (!confirm('Mitarbeiter wirklich deaktivieren?')) return;
+    if (!confirm("Mitarbeiter wirklich deaktivieren?")) return;
     setErrorMsg(null);
     try {
       await deleteUser({ id }).unwrap();
     } catch (err: any) {
       console.error(err);
-      setErrorMsg('Mitarbeiter konnte nicht deaktiviert werden.');
+      setErrorMsg("Mitarbeiter konnte nicht deaktiviert werden.");
     }
   };
 
@@ -122,7 +124,10 @@ export default function TeamPage() {
         <h1>Team & Mitarbeiter</h1>
 
         {errorMsg && (
-          <div className="card" style={{ borderColor: '#b94a4a', color: '#ffbdbd' }}>
+          <div
+            className="card"
+            style={{ borderColor: "#b94a4a", color: "#ffbdbd" }}
+          >
             {errorMsg}
           </div>
         )}
@@ -132,7 +137,7 @@ export default function TeamPage() {
           <h2>Neuen Mitarbeiter anlegen</h2>
           <form className="grid" style={{ gap: 12 }} onSubmit={handleCreate}>
             <div className="row">
-              <div style={{ flex: '2 1 260px' }}>
+              <div style={{ flex: "2 1 260px" }}>
                 <div className="label">Name</div>
                 <input
                   className="input"
@@ -141,7 +146,7 @@ export default function TeamPage() {
                   required
                 />
               </div>
-              <div style={{ flex: '2 1 260px' }}>
+              <div style={{ flex: "2 1 260px" }}>
                 <div className="label">E-Mail</div>
                 <input
                   className="input"
@@ -154,24 +159,29 @@ export default function TeamPage() {
             </div>
 
             <div className="row">
-              <div style={{ flex: '2 1 260px' }}>
+              <div style={{ flex: "2 1 260px" }}>
                 <div className="label">Passwort</div>
                 <input
                   className="input"
                   type="password"
                   value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
                   required
                   placeholder="Initialpasswort"
                 />
               </div>
-              <div style={{ flex: '1 1 160px' }}>
+              <div style={{ flex: "1 1 160px" }}>
                 <div className="label">Rolle</div>
                 <select
                   className="input"
                   value={form.role}
                   onChange={(e) =>
-                    setForm({ ...form, role: e.target.value as 'OWNER' | 'ADMIN' | 'MEMBER' })
+                    setForm({
+                      ...form,
+                      role: e.target.value as "OWNER" | "ADMIN" | "MEMBER",
+                    })
                   }
                 >
                   <option value="MEMBER">Mitarbeiter</option>
@@ -182,29 +192,33 @@ export default function TeamPage() {
             </div>
 
             <div className="row">
-              <div style={{ flex: '1 1 160px' }}>
+              <div style={{ flex: "1 1 160px" }}>
                 <div className="label">Abteilung</div>
                 <input
                   className="input"
                   value={form.department}
-                  onChange={(e) => setForm({ ...form, department: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, department: e.target.value })
+                  }
                   placeholder="z.B. Buchhaltung"
                 />
               </div>
-              <div style={{ flex: '1 1 160px' }}>
+              <div style={{ flex: "1 1 160px" }}>
                 <div className="label">Position</div>
                 <input
                   className="input"
                   value={form.position}
-                  onChange={(e) => setForm({ ...form, position: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, position: e.target.value })
+                  }
                   placeholder="z.B. Sachbearbeiter"
                 />
               </div>
             </div>
 
-            <div className="row" style={{ justifyContent: 'flex-end' }}>
+            <div className="row" style={{ justifyContent: "flex-end" }}>
               <button className="btn primary" disabled={creating}>
-                {creating ? 'Anlegen...' : 'Mitarbeiter anlegen'}
+                {creating ? "Anlegen..." : "Mitarbeiter anlegen"}
               </button>
             </div>
           </form>
@@ -241,7 +255,7 @@ export default function TeamPage() {
                         {isEditing ? (
                           <input
                             className="input"
-                            value={row.name ?? ''}
+                            value={row.name ?? ""}
                             onChange={(e) =>
                               setEditRow({ ...row, name: e.target.value })
                             }
@@ -255,11 +269,11 @@ export default function TeamPage() {
                         {isEditing ? (
                           <select
                             className="input"
-                            value={row.role ?? 'MEMBER'}
+                            value={row.role ?? "MEMBER"}
                             onChange={(e) =>
                               setEditRow({
                                 ...row,
-                                role: e.target.value as UserRow['role'],
+                                role: e.target.value as UserRow["role"],
                               })
                             }
                           >
@@ -275,29 +289,29 @@ export default function TeamPage() {
                         {isEditing ? (
                           <input
                             className="input"
-                            value={row.department ?? ''}
+                            value={row.department ?? ""}
                             onChange={(e) =>
                               setEditRow({ ...row, department: e.target.value })
                             }
                           />
                         ) : (
-                          u.department ?? '—'
+                          (u.department ?? "—")
                         )}
                       </td>
                       <td>
                         {isEditing ? (
                           <input
                             className="input"
-                            value={row.position ?? ''}
+                            value={row.position ?? ""}
                             onChange={(e) =>
                               setEditRow({ ...row, position: e.target.value })
                             }
                           />
                         ) : (
-                          u.position ?? '—'
+                          (u.position ?? "—")
                         )}
                       </td>
-                      <td>{u.isActive ? 'Aktiv' : 'Inaktiv'}</td>
+                      <td>{u.isActive ? "Aktiv" : "Inaktiv"}</td>
                       <td className="row">
                         {isEditing ? (
                           <>
@@ -308,7 +322,11 @@ export default function TeamPage() {
                             >
                               Speichern
                             </button>
-                            <button className="btn" onClick={cancelEdit} disabled={saving}>
+                            <button
+                              className="btn"
+                              onClick={cancelEdit}
+                              disabled={saving}
+                            >
                               Abbrechen
                             </button>
                           </>

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "@/store";
+import { RootState } from "@/store/store";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -15,7 +15,7 @@ const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Auth", "User", "Client", "ClientEmployee", "Quote", "Invoice"],
+  tagTypes: ["Auth", "User", "Client", "ClientEmployee", "Quote", "Invoice", "Project", "Task"],
   endpoints: () => ({}),
 });
 

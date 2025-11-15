@@ -3,11 +3,10 @@ import React from "react";
 import "../styles/globals.scss";
 import { Providers } from "@/store/Providers";
 import AppShell from "@/components/layout/AppShell";
-import { AuthInit } from "@/components/AuthInit";
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard",
-  description: "Next.js + TS + Redux + Sass Dashboard",
+  title: "SMB-Suite",
+  description: "The Suite of Tools for small and medium businesses",
 };
 
 export default function RootLayout({

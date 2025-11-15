@@ -30,6 +30,34 @@ enum InvoiceStatus {
   CANCELED
 }
 
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  CANCELED
+}
+
+enum BillingType {
+  TIME_AND_MATERIAL
+  FIXED_PRICE
+  RETAINER
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+  CANCELED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model User {
   id             String   @id @default(cuid())
   email          String   @unique
@@ -41,7 +69,8 @@ model User {
   department     String?    // z.B. "Vertrieb", "Backoffice"
   position       String?    // z.B. "Sachbearbeiter", "Inhaber"
   isActive       Boolean    @default(true)
-
+  projects Project[]
+  tasksAssigned Task[] @relation("UserTasks")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
@@ -55,6 +84,7 @@ model Organization {
   clients   Client[]
   quotes    Quote[]
   invoices  Invoice[]
+  projects Project[]
   createdAt DateTime  @default(now())
 }
 
@@ -82,6 +112,7 @@ model Client {
 
   quotes   Quote[]
   invoices Invoice[]
+  projects Project[]
 }
 
 model ClientEmployee {
@@ -102,12 +133,77 @@ model ClientEmployee {
   updatedAt DateTime @updatedAt
 }
 
+model Project {
+  id             String         @id @default(cuid())
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id])
+
+  clientId       String?
+  client         Client?        @relation(fields: [clientId], references: [id])
+
+  userId       String?
+  user         User?        @relation(fields: [userId], references: [id])
+
+  name           String
+  code           String?        @unique // z.B. "HRTL-WEB-001"
+  description    String?
+
+  status         ProjectStatus  @default(PLANNING)
+  billingType    BillingType    @default(TIME_AND_MATERIAL)
+  hourlyRate     Decimal?       @db.Decimal(10,2)
+  budgetHours    Decimal?       @db.Decimal(10,2)
+  budgetAmount   Decimal?       @db.Decimal(10,2)
+
+  repoUrl        String?
+  stagingUrl     String?
+  productionUrl  String?
+  techStack      String?        // z.B. "Next.js, NestJS, Postgres"
+
+  startDate      DateTime?
+  endDate        DateTime?
+
+  notes          String?
+
+  quotes         Quote[]
+  invoices       Invoice[]
+  tasks         Task[]
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Task {
+  id             String        @id @default(cuid())
+  
+  projectId      String
+  project        Project       @relation(fields: [projectId], references: [id])
+
+  title          String
+  description    String?
+  status         TaskStatus    @default(TODO)
+  priority       TaskPriority  @default(MEDIUM)
+
+  assigneeId     String?
+  assignee       User?         @relation("UserTasks", fields: [assigneeId], references: [id])
+
+  dueDate        DateTime?
+
+  estimateHours  Decimal?      @db.Decimal(5,2)
+  loggedHours    Decimal?      @db.Decimal(6,2) @default(0)
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+
 model Quote {
   id             String       @id @default(cuid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
   clientId       String
   client         Client       @relation(fields: [clientId], references: [id])
+  projectId      String?
+  project        Project? @relation(fields: [projectId], references: [id])
   number         Int
   status         QuoteStatus  @default(DRAFT)
   currency       String       @default("EUR")
@@ -142,6 +238,8 @@ model Invoice {
   client         Client        @relation(fields: [clientId], references: [id])
   quoteId        String?
   quote          Quote?        @relation(fields: [quoteId], references: [id])
+  projectId      String?
+  project        Project? @relation(fields: [projectId], references: [id])
   number         Int
   status         InvoiceStatus @default(DRAFT)
   issueDate      DateTime

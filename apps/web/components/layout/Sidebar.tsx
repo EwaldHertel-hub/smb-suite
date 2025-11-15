@@ -8,6 +8,7 @@ const navItems = [
   { href: "/", label: "Home" },
   { href: "/team", label: "Team" },
   { href: "/clients", label: "Kunden" },
+  { href: "/projects", label: "Projekte" },
   { href: "/invoices", label: "Rechnungen" },
   { href: "/quotes", label: "Angebote" },
   { href: "/calendar", label: "Calendar" },
@@ -18,7 +19,7 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar__logo">Admin Panel</div>
+      <div className="sidebar__logo">SMB-Suite</div>
       <nav className="sidebar__nav">
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href);
