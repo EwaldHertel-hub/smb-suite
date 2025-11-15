@@ -32,6 +32,7 @@ export class ProjectsService {
     const project = await this.prisma.project.findUnique({
       where: { id },
       include: {
+        user: { select: { id: true, name: true } },
         client: { select: { id: true, name: true } },
         quotes: {
           select: { id: true, number: true, status: true, total: true, createdAt: true },

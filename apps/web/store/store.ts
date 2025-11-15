@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import api from './api/baseApi';
 import { rootReducer } from "./rootReducer";
 import './slices/usersApi';
+import './slices/taskApi';
 
 export const makeStore = () =>
   configureStore({

@@ -8,50 +8,66 @@ import {
   Param,
   Req,
   UseGuards,
-} from '@nestjs/common';
-import { TasksService } from './tasks.service';
-import { JwtAuthGuard } from '../../common/auth/jwt.guard';
-import { RolesGuard } from '../../common/auth/roles.guard';
-import { Roles } from '../../common/auth/roles.decorator';
-import { CreateTaskDto, UpdateTaskDto } from './tasks.dto';
+} from "@nestjs/common";
+import { TasksService } from "./tasks.service";
+import { JwtAuthGuard } from "../../common/auth/jwt.guard";
+import { RolesGuard } from "../../common/auth/roles.guard";
+import { Roles } from "../../common/auth/roles.decorator";
+import { CreateTaskDto, UpdateTaskDto } from "./tasks.dto";
+import { CreateTimeEntryDto } from "./time-entry.dto";
 
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('projects/:projectId/tasks')
+@Controller("projects/:projectId/tasks")
 export class TasksController {
   constructor(private readonly svc: TasksService) {}
 
   @Get()
-  list(@Req() req: any, @Param('projectId') projectId: string) {
-    return this.svc.list(req.user.organizationId, projectId);
+  list(@Req() req: any, @Param("projectId") projectId: string) {
+    return this.svc.list(req.user.sub, projectId);
+  }
+
+  @Post(":taskId/time-entries")
+  addTime(
+    @Req() req: any,
+    @Param("projectId") projectId: string,
+    @Param("taskId") taskId: string,
+    @Body() dto: CreateTimeEntryDto
+  ) {
+    return this.svc.addTimeEntry(
+      req.user.organizationId,
+      projectId,
+      taskId,
+      req.user.sub,
+      dto
+    );
   }
 
   @Post()
-  // normale Mitarbeiter dürfen Tasks anlegen, daher keine Rollenbeschränkung
   create(
     @Req() req: any,
-    @Param('projectId') projectId: string,
-    @Body() dto: CreateTaskDto,
+    @Param("projectId") projectId: string,
+    @Body() dto: CreateTaskDto
   ) {
-    return this.svc.create(req.user.organizationId, projectId, dto);
+    return this.svc.create(req.user.sub, projectId, dto);
   }
 
-  @Patch(':taskId')
+  @Patch(":taskId")
   update(
     @Req() req: any,
-    @Param('projectId') projectId: string,
-    @Param('taskId') taskId: string,
-    @Body() dto: UpdateTaskDto,
+    @Param("projectId") projectId: string,
+    @Param("taskId") taskId: string,
+    @Body() dto: UpdateTaskDto
   ) {
-    return this.svc.update(req.user.organizationId, projectId, taskId, dto);
+    return this.svc.update(req.user.sub, projectId, taskId, dto);
   }
 
-  @Delete(':taskId')
-  @Roles('OWNER', 'ADMIN')
+  @Delete(":taskId")
+  @Roles("OWNER", "ADMIN")
   remove(
     @Req() req: any,
-    @Param('projectId') projectId: string,
-    @Param('taskId') taskId: string,
+    @Param("projectId") projectId: string,
+    @Param("taskId") taskId: string
   ) {
-    return this.svc.remove(req.user.organizationId, projectId, taskId);
+    return this.svc.remove(req.user.sub, projectId, taskId);
   }
 }

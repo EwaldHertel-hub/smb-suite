@@ -1,6 +1,8 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Decimal } from '@prisma/client/runtime/library';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { CreateTaskDto, UpdateTaskDto } from './tasks.dto';
+import { CreateTimeEntryDto } from './time-entry.dto';
 
 @Injectable()
 export class TasksService {
@@ -8,8 +10,10 @@ export class TasksService {
 
   private async ensureProject(userId: string, projectId: string) {
     const project = await this.prisma.project.findUnique({ where: { id: projectId } });
-    if (!project || project.userId !== userId) {
-      throw new ForbiddenException('Kein Zugriff auf dieses Projekt.');
+    if (!project) {
+      throw new ForbiddenException('Kein Projekt übergeben.');
+    }else if (project.userId !== userId) {
+      throw new ForbiddenException(`gesendet ${project.userId} erwartet ${userId}.`);
     }
     return project;
   }
@@ -21,6 +25,7 @@ export class TasksService {
       orderBy: { createdAt: 'asc' },
       include: {
         assignee: { select: { id: true, name: true, email: true } },
+        timeEntries: { select: { hours: true } },
       },
     });
   }
@@ -65,4 +70,45 @@ export class TasksService {
     }
     return this.prisma.task.delete({ where: { id: taskId } });
   }
+
+  async addTimeEntry(
+  orgId: string,
+  projectId: string,
+  taskId: string,
+  userId: string,
+  dto: CreateTimeEntryDto,
+) {
+  await this.ensureProject(orgId, projectId);
+
+  const task = await this.prisma.task.findUnique({ where: { id: taskId } });
+  if (!task || task.assigneeId !== userId || task.projectId !== projectId) {
+    throw new ForbiddenException('Kein Zugriff auf diese Task.');
+  }
+  const hoursDecimal = new Decimal(dto.hours);
+
+  const entry = await this.prisma.$transaction(async (tx) => {
+    const timeEntry = await tx.timeEntry.create({
+      data: {
+        projectId,
+        taskId,
+        userId,
+        date: new Date(dto.date),
+        hours: hoursDecimal,
+        note: dto.note,
+      },
+    });
+    // loggedHours auf Task erhöhen
+    const prev = task.loggedHours ?? new Decimal(0);
+    await tx.task.update({
+      where: { id: taskId },
+      data: {
+        loggedHours: prev.plus(hoursDecimal),
+      },
+    });
+
+    return timeEntry;
+  });
+
+  return entry;
+}
 }
